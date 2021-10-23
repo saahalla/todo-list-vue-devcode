@@ -3,14 +3,35 @@
         <div>
             <v-row>
                 <v-col class="col">
-                    <h1 class="activity-title" data-cy="activity-title">Activity</h1>
+                    <h1 class="todo-title" data-cy="todo-title" v-if="edit">
+                        <v-icon size="40" @click="backButton()" data-cy="todo-back-button">
+                            mdi-chevron-left
+                        </v-icon>
+                        <v-text-field 
+                            type="text" 
+                            v-model="activity.title" 
+                            outlined 
+                            color="#16ABF8"
+                            @change="updateActivity(activity.id)"
+                        >
+                        </v-text-field>
+                    </h1>
+                    <h1 class="todo-title" data-cy="todo-title" v-else>
+                        <v-icon size="40" @click="backButton()" data-cy="todo-back-button">
+                            mdi-chevron-left
+                        </v-icon>
+                        {{activity.title}}
+                        <v-icon @click="edit = true">
+                            mdi-pencil
+                        </v-icon>
+                    </h1>
                 </v-col>
                 <v-spacer></v-spacer>
                 <v-col>
                     <v-btn 
-                        class="btn-add-activity white--text rounded-pill pa-6"
+                        class="btn-add-todo white--text rounded-pill pa-6"
                         color="#16ABF8"
-                        data-cy="activity-add-button"   
+                        data-cy="todo-add-button"   
                         @click="addActivity"     
                     >
                     <v-icon>mdi-plus</v-icon>
@@ -24,38 +45,35 @@
                         data-cy="activity-item"
                         width="235px"
                         height="234px"
-                        style="border-radius: 10px;"
+                        style="border-radius: 10px; "
                     >
-                        <div 
-                            class="card-header"
-                            @click="showActivity(act.id)"
-                        >
-                            <p data-cy="activity-item-title">
-                                {{act.title}}
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                            <v-row>
-                                <v-card-subtitle data-cy="activity-item-date">
+                        <v-card-title>
+                            {{act.title}}
+                        </v-card-title>
+                        <v-card-action>
+                            <v-row class="d-flex flex-column align-center">
+                                <p class="mt-16">
                                     {{formatDate(act.created_at)}}
-                                </v-card-subtitle>
-                                <v-icon class="ml-8" @click="deleteActivity(act.id)">
-                                    mdi-delete
-                                </v-icon>
+                                </p>
+                                <v-btn
+                                    data-cy="activity-item-delete-button"
+                                    @click="deleteActivity(act.id)"
+                                >
+                                    <v-icon>mdi-delete</v-icon>
+                                </v-btn>
                             </v-row>
-                        </div>
+                        </v-card-action>
                     </v-card>
                 </v-col>
             </v-row>
             <v-row v-else>
                 <v-col class="d-flex flex-column align-center mt-32" data-cy="activity-empty-state">
                     <v-img 
-                        src="../../assets/empty.png" 
-                        alt="empty" 
-                        max-width="767px" 
-                        max-height="490px"
+                        src="../../assets/todo-empty-state.png" 
+                        alt="empty-state" 
+                        max-width="541px" 
+                        max-height="413px"
                         data-cy="activity-empty-state"
-                        @click="addActivity"
                     >
                     </v-img>
                 </v-col>
@@ -66,34 +84,51 @@
 
 <script>
 import {callApi} from '../../callApi';
-// import { Icon } from '@iconify/vue2';
 
   export default {
     name: 'Dashboard',
     data: function () {
         return {
-            activity: [
-                
-            ]
+            activity: {},
+            edit: false,
+            todo: {
+                title: 'todo title',
+                priority: 'very-high'
+            }
         }
     },
     components: {
-    //   Icon
+      
     },
     mounted() {
         this.getData();
     },
     methods: {
         getData: async function() {
-            let results = await callApi('/activity-groups?email=saahalla@gmail.com', 'GET', {});
+            let act_id = this.$route.params.id;
+            // alert(JSON.stringify(act_id));
+            let results = await callApi(`/activity-groups/${act_id}?email=saahalla@gmail.com`, 'GET', {});
             console.log(results);
-            this.activity = results.data;
+            this.activity = results;
+        },
+        updateActivity: async function(id) {
+            let results = await callApi('/activity-groups/'+id, 'PATCH', {title: this.activity.title})
+            if (results) {
+               this.getData(); 
+               this.edit=false;
+            }
         },
         addActivity: async function() {
-            let results = await callApi('/activity-groups', 'POST', {title: 'New Activity', email: 'saahalla@gmail.com'})
-            if (results.email === 'saahalla@gmail.com') {
-               this.getData(); 
+            let data = {
+                activity_group_id: this.activity.id,
+                title: this.todo.title,
+                priority: this.todo.priority || 'high'
             }
+                alert(JSON.stringify(data))
+            // let results = await callApi('/activity-groups', 'POST', {title: 'New Activity', email: 'saahalla@gmail.com'})
+            // if (results.email === 'saahalla@gmail.com') {
+            //    this.getData(); 
+            // }
         },
         async deleteActivity(id) {
             // alert(id);
@@ -125,16 +160,15 @@ import {callApi} from '../../callApi';
             date = `${dd} ${mm} ${yyyy}`;
             return date;
         },
-        showActivity(id) {
-            // alert(id)
-            this.$router.push(`/activity/${id}`)
-        },
+        backButton() {
+            window.history.back();
+        }
     }
-  } 
+  }
 </script>
 
 <style lang="scss" scoped>
-    .activity-title {
+    .todo-title {
         /* activity-title */
         position: absolute;
         top: 63px;
@@ -152,7 +186,7 @@ import {callApi} from '../../callApi';
             margin-right: 120px;
         }
     }
-    .btn-add-activity {
+    .btn-add-todo {
         top: 63px;
         @media only screen and (min-width: 768px) {
             margin-left: 120px;
@@ -161,24 +195,5 @@ import {callApi} from '../../callApi';
     }
     .mt-32 {
         margin-top: 120px;
-    }
-    
-    .card-header {
-        padding-top: 15px;
-        padding-left: 20px;
-        padding-right: 20px;
-        height: 190px;
-        font-family: Poppins;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 20px;
-        line-height: 30px;
-        // /* identical to box height */
-        // background-color: blue;
-    }
-    .card-footer {
-        // padding-right: 20px;
-        // padding-left: 20px;
-        // background-color: red;
     }
 </style>

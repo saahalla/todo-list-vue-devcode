@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Dashboard from '../views/Todo/Dashboard.vue'
+import Activity from '../views/Todo/Activity.vue'
 
 Vue.use(VueRouter)
 
@@ -15,7 +16,8 @@ const routes = [
         component: Dashboard
       },
       {
-        path: '/test',
+        path: '/activity/:id',
+        component: Activity
       }
     ]
   }
