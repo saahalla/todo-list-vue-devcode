@@ -18,35 +18,79 @@
                     </v-btn>
                 </v-col>
             </v-row>
-            <v-row v-if="activity.length > 0" style="margin-left">
-                <v-col class="d-flex flex-column align-center mt-32" data-cy="activity-empty-state" v-for="(act, k) in activity" :key="k">
-                    <v-card 
-                        data-cy="activity-item"
-                        width="235px"
-                        height="234px"
-                        style="border-radius: 10px;"
-                    >
-                        <div 
-                            class="card-header"
-                            @click="showActivity(act.id)"
+            <div v-if="activity.length > 0" class="mt-32">
+                <v-row style="margin-left">
+                    <v-col class="d-flex flex-column align-center" v-for="(act, k) in activity" :key="k">
+                        <v-card 
+                            data-cy="activity-item"
+                            width="235px"
+                            height="234px"
+                            style="border-radius: 10px;"
                         >
-                            <p data-cy="activity-item-title">
-                                {{act.title}}
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                            <v-row>
-                                <v-card-subtitle data-cy="activity-item-date">
-                                    {{formatDate(act.created_at)}}
-                                </v-card-subtitle>
-                                <v-icon class="ml-8" @click="deleteActivity(act.id)">
-                                    mdi-delete
-                                </v-icon>
-                            </v-row>
-                        </div>
-                    </v-card>
-                </v-col>
-            </v-row>
+                            <v-card flat
+                                class="card-header"
+                                @click="showActivity(act.id)"
+                            >
+                                <p data-cy="activity-item-title">
+                                    {{act.title}}
+                                </p>
+                            </v-card>
+                            <div class="card-footer">
+                                <v-row>
+                                    <v-card-subtitle data-cy="activity-item-date">
+                                        {{formatDate(act.created_at)}}
+                                    </v-card-subtitle>
+                                    <v-spacer></v-spacer>
+                                    <v-col>
+                                        <v-dialog 
+                                            v-model="modalDeleteActivity" 
+                                            max-width="490px" 
+                                            style="height: 355px"
+                                            :retain-focus="false"
+                                        >
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-icon 
+                                                    data-cy="activity-item-delete-button" 
+                                                    v-bind="attrs" 
+                                                    v-on="on" 
+                                                    @click="set({data: act})"
+                                                    class="mr-3"
+                                                >
+                                                    $vuetify.icons.custom
+                                                </v-icon>
+                                                
+                                            </template>
+                                            <v-card
+                                                rounded
+                                                data-cy="modal-delete"
+                                                style="text-align: center"
+                                                class="px-9 py-6"
+                                            >
+                                                <v-icon size="84" data-cy="modal-delete-icon" class="delete-card-header">
+                                                    $vuetify.icons.customAlert
+                                                </v-icon>
+                                                <v-card-title style="text-align: center">
+                                                    Apakah anda yakin menghapus Activity "{{itemActivity.title}}"
+                                                </v-card-title>
+                                                <v-col>
+                                                    <v-btn color="#f4f4f4" data-cy="modal-delete-cancel-button" rounded class="px-8 mr-4" @click="modalDeleteActivity=false">
+                                                        Batal
+                                                    </v-btn>
+                                                    <v-btn color="#ED4C5C" data-cy="modal-delete-confirm-button" rounded class="px-8" @click="deleteActivity(itemActivity.id)">
+                                                        Hapus
+                                                    </v-btn>
+                                                </v-col>
+                                                
+                                            </v-card>
+                                        </v-dialog>
+
+                                    </v-col>
+                                </v-row>
+                            </div>
+                        </v-card>
+                    </v-col>
+                </v-row>
+            </div>
             <v-row v-else>
                 <v-col class="d-flex flex-column align-center mt-32" data-cy="activity-empty-state">
                     <v-img 
@@ -60,13 +104,23 @@
                     </v-img>
                 </v-col>
             </v-row>
+            <v-dialog v-model="deleteSuccess" max-width="490px" style="height: 58px">
+                <v-card>
+                    <v-card-title data-cy="modal-information-title">
+                        <v-icon left data-cy="modal-information-icon">
+                            $vuetify.icons.customIconCircleAlert
+                        </v-icon>
+                        Activity Berhasil Dihapus
+                    </v-card-title>
+                </v-card>
+            </v-dialog>
         </div>
     </v-container>
 </template>
 
 <script>
 import {callApi} from '../../callApi';
-// import { Icon } from '@iconify/vue2';
+// import swal from 'sweetalert';
 
   export default {
     name: 'Dashboard',
@@ -74,7 +128,10 @@ import {callApi} from '../../callApi';
         return {
             activity: [
                 
-            ]
+            ],
+            modalDeleteActivity: false,
+            deleteSuccess: false,
+            itemActivity: {}
         }
     },
     components: {
@@ -100,6 +157,9 @@ import {callApi} from '../../callApi';
             let results = await callApi('/activity-groups/'+id, 'DELETE', {});
             if(results){
                 this.getData();
+                this.modalDeleteActivity = false;
+                // swal('Activity berhasil dihapus','', 'success')
+                this.deleteSuccess = true;
             }
 
         },
@@ -129,6 +189,9 @@ import {callApi} from '../../callApi';
             // alert(id)
             this.$router.push(`/activity/${id}`)
         },
+        set(d) {
+            this.itemActivity = d.data;
+        }
     }
   } 
 </script>
@@ -177,8 +240,12 @@ import {callApi} from '../../callApi';
         // background-color: blue;
     }
     .card-footer {
-        // padding-right: 20px;
-        // padding-left: 20px;
+        padding-right: 20px;
+        padding-left: 20px;
+        // background-color: red;
+    }
+    .delete-card-header {
+        height: 130px;
         // background-color: red;
     }
 </style>
