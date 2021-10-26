@@ -3,31 +3,38 @@
         <div>
             <v-row>
                 <v-col class="col">
-                    <v-row class="todo-title" v-if="edit">
-                        <v-icon size="40" @click="backButton()" data-cy="todo-back-button">
-                            mdi-chevron-left
-                        </v-icon>
+                    <v-row class="todo-title">
+                        <v-btn @click="backButton()" data-cy="todo-back-button" class="mr-2 mt-2" plain>
+                            <v-icon size="40">
+                                mdi-chevron-left
+                            </v-icon>
+                        </v-btn>
                         <v-text-field 
                             type="text" 
                             v-model="activity.title" 
                             outlined 
                             color="#16ABF8"
                             @change="updateActivity(activity.id)"
-                            data-cy="todo-title" 
+                            v-if="edit"
                         >
                         </v-text-field>
-                    </v-row>
-                    <v-row class="todo-title" v-else>
-                        <v-icon size="40" @click="backButton()" data-cy="todo-back-button" class="mr-4">
-                            mdi-chevron-left
-                        </v-icon>
-                        <p @click="edit = true" data-cy="todo-title">{{activity.title}}</p>
-                        <v-icon @click="edit = true" data-cy="todo-title-edit-button" class="ml-4">
-                            $vuetify.icons.customEdit
-                        </v-icon>
+                        <p @click="edit = true" data-cy="todo-title" v-else>{{activity.title}}
+                            <v-btn @click="edit = true" data-cy="todo-title-edit-button" class="ml-2" plain>
+                                <v-icon>
+                                    $vuetify.icons.customEdit
+                                </v-icon>
+                            </v-btn>
+                        </p>
                     </v-row>
                 </v-col>
                 <v-spacer></v-spacer>
+                <v-col>
+                    <v-btn style="margin-top: 63px; float: right" class="rounded-pill pa-6" data-cy="todo-sort-button">
+                        <v-icon>
+                            mdi-sort
+                        </v-icon>
+                    </v-btn>
+                </v-col>
                 <v-col>
                     <v-dialog
                         v-model="modalAdd"
@@ -54,9 +61,11 @@
                                     <v-row>
                                         <p data-cy="modal-add-title">Tambah List Item</p>
                                         <v-spacer></v-spacer>
-                                        <v-icon @click="modalAdd=false" data-cy="modal-add-close-button">
-                                            mdi-close
-                                        </v-icon>
+                                        <v-btn plain @click="modalAdd=false" data-cy="modal-add-close-button">
+                                            <v-icon>
+                                                mdi-close
+                                            </v-icon>
+                                        </v-btn>
 
                                     </v-row>
                                 </v-container>
@@ -91,7 +100,7 @@
                     </v-dialog>
                 </v-col>
             </v-row>
-            <div v-if="activity.todo_items.length > 0" class="mt-16">
+            <div v-if="activity.todo_items && activity.todo_items.length > 0" class="mt-16">
                 <v-row>
                     <v-col class="d-flex flex-column align-center" v-for="(td, k) in activity.todo_items" :key="k">
                         <v-card 
@@ -117,16 +126,18 @@
                             <v-card-title data-cy="todo-item-title">
                                 {{td.title}}
                             </v-card-title>
-                            <v-col class="mt-2">
+                            <v-col>
                                 <v-dialog v-model="modalEdit" max-width="830px" :retain-focus="false">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-icon data-cy="todo-item-edit-button" v-on="on" v-bind="attrs" @click="set({data: td})">
-                                            $vuetify.icons.customEdit
-                                        </v-icon>
+                                        <v-btn data-cy="todo-item-edit-button" v-on="on" v-bind="attrs" @click="set({data: td})" plain>
+                                            <v-icon>
+                                                $vuetify.icons.customEdit
+                                            </v-icon>
+                                        </v-btn>
                                     </template>  
                                     <v-card
                                         rounded
-                                        data-cy="modal-edit"
+                                        data-cy="modal-add"
                                     >
                                         <v-card-title>
                                             <v-container>
@@ -146,7 +157,7 @@
                                                 <label class="text-uppercase">Nama List Item</label>
                                                 <v-text-field
                                                     outlined
-                                                    data-cy="modal-edit-name-input"
+                                                    data-cy="modal-add-name-input"
                                                     v-model="itemTodo.title"
                                                 >
                                                 </v-text-field>
@@ -157,11 +168,11 @@
                                                     :items="prioritys"
                                                     outlined
                                                     style="width: 205px"
-                                                    data-cy="modal-edit-priority-dropdown"
+                                                    data-cy="modal-add-priority-dropdown"
                                                 >
                                                     
                                                 </v-select>
-                                                <v-btn color="primary" rounded @click="editTodo()" data-cy="modal-edit-save-button">
+                                                <v-btn color="primary" rounded @click="editTodo()" data-cy="modal-add-save-button">
                                                     Simpan
                                                 </v-btn>
                                             </v-container>
@@ -174,9 +185,11 @@
                             <div>
                                 <v-dialog v-model="modalDelete" max-width="490px" style="height: 355px">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-icon data-cy="todo-item-delete-button" v-on="on" v-bind="attrs" class="mt-5" @click="set({data: td})">
-                                            $vuetify.icons.custom
-                                        </v-icon>
+                                        <v-btn data-cy="todo-item-delete-button" v-on="on" v-bind="attrs" class="mt-4" @click="set({data: td})" plain>
+                                            <v-icon>
+                                                $vuetify.icons.custom
+                                            </v-icon>
+                                        </v-btn>
                                         
                                     </template>
                                     <v-card
@@ -211,27 +224,17 @@
                 </v-row>
             </div>
             <v-row v-else>
-                <v-col class="d-flex flex-column align-center mt-32" data-cy="todo-empty-state">
+                <v-col class="d-flex flex-column align-center mt-32">
                     <v-img 
                         src="../../assets/todo-empty-state.png" 
                         alt="empty-state" 
                         max-width="541px" 
                         max-height="413px"
-                        data-cy="activity-empty-state"
+                        data-cy="todo-empty-state"
                     >
                     </v-img>
                 </v-col>
             </v-row>
-            <v-dialog v-model="deleteSuccess" max-width="490px" style="height: 58px">
-                <v-card>
-                    <v-card-title data-cy="modal-information-title">
-                        <v-icon left data-cy="modal-information-icon">
-                            $vuetify.icons.customIconCircleAlert
-                        </v-icon>
-                        Item Berhasil Dihapus
-                    </v-card-title>
-                </v-card>
-            </v-dialog>
         </div>
     </v-container>
 </template>
@@ -274,7 +277,6 @@ import {callApi} from '../../callApi';
             modalAdd: false,
             modalEdit: false,
             modalDelete: false,
-            deleteSuccess: false,
             itemTodo: {}
                 
         }
@@ -338,7 +340,6 @@ import {callApi} from '../../callApi';
             if(results) {
                 this.getData()
                 this.modalDelete = false;
-                this.deleteSuccess = true;
             }
         },
         todoColor(priority) {
@@ -379,9 +380,10 @@ import {callApi} from '../../callApi';
     }
     .btn-add-todo {
         margin-top: 63px;
+        float: right;
         @media only screen and (min-width: 768px) {
-            margin-left: 120px;
-            margin-right: 120px;
+            // margin-left: 120px;
+            margin-right: 150px;
         }
     }
     .mt-32 {
