@@ -19,7 +19,7 @@ const routes = [
         component: Dashboard
       },
       {
-        path: '/activity/:id',
+        path: '/detail/:id',
         component: Activity
       }
     ]

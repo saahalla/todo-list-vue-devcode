@@ -188,7 +188,7 @@ import {callApi} from '../../callApi';
         },
         showActivity(id) {
             // alert(id)
-            this.$router.push(`/activity/${id}`)
+            this.$router.push(`/detail/${id}`)
         },
         set(d) {
             this.itemActivity = d.data;

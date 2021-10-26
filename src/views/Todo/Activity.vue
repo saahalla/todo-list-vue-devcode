@@ -249,8 +249,8 @@ import {callApi} from '../../callApi';
             activity: {}, // activity
             edit: false,
             todo: {
-                title: 'todo title',
-                priority: ''
+                title: '',
+                priority: 'high'
             },
             prioritys: [//'Very High', 'High', 'Medium', 'Low', 'Very Low'
                 {
