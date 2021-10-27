@@ -356,10 +356,8 @@ import {callApi} from '../../callApi';
         async updateStatusTodo(data) {
             data.is_active = data.is_active == 1 ? 0 : 1
             // alert(JSON.stringify(data))
-            let results = await callApi(`/todo-items/${data.id}`, 'PATCH', data);
-            if(results) {
-                this.getData()
-            }
+            await callApi(`/todo-items/${data.id}`, 'PATCH', data);
+           
         },
         showAddModal() {
             this.modalAdd = true;
