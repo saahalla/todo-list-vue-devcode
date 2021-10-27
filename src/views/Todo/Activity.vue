@@ -18,13 +18,13 @@
                             v-if="edit"
                         >
                         </v-text-field>
-                        <p @click="edit = true" data-cy="todo-title" v-else>{{activity.title}}
+                        <h4 @click="edit = true" data-cy="todo-title" v-else>{{activity.title}}
                             <v-btn @click="edit = true" data-cy="todo-title-edit-button" class="ml-2" plain>
                                 <v-icon>
                                     $vuetify.icons.customEdit
                                 </v-icon>
                             </v-btn>
-                        </p>
+                        </h4>
                     </v-row>
                 </v-col>
                 <v-spacer></v-spacer>
@@ -59,7 +59,7 @@
                             <v-card-title>
                                 <v-container>
                                     <v-row>
-                                        <p data-cy="modal-add-title">Tambah List Item</p>
+                                        <h4 data-cy="modal-add-title">Tambah List Item</h4>
                                         <v-spacer></v-spacer>
                                         <v-btn plain @click="modalAdd=false" data-cy="modal-add-close-button">
                                             <v-icon>

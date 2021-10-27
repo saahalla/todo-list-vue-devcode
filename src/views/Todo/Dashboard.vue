@@ -31,9 +31,9 @@
                                 class="card-header"
                                 @click="showActivity(act.id)"
                             >
-                                <p data-cy="activity-item-title">
+                                <h4 data-cy="activity-item-title">
                                     {{act.title}}
-                                </p>
+                                </h4>
                             </v-card>
                             <div class="card-footer">
                                 <v-row>
