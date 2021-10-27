@@ -100,9 +100,9 @@
                     </v-dialog>
                 </v-col>
             </v-row>
-            <div v-if="activity.todo_items && activity.todo_items.length > 0" class="mt-16">
+            <div v-if="todo_items && todo_items.length > 0" class="mt-16">
                 <v-row>
-                    <v-col class="d-flex flex-column align-center" v-for="(td, k) in activity.todo_items" :key="k">
+                    <v-col class="d-flex flex-column align-center" v-for="(td, k) in todo_items" :key="k">
                         <v-card 
                             data-cy="todo-item"
                             width="800px"
@@ -247,6 +247,7 @@ import {callApi} from '../../callApi';
     data: function () {
         return {
             activity: {}, // activity
+            todo_items: [],
             edit: false,
             todo: {
                 title: '',
@@ -293,6 +294,7 @@ import {callApi} from '../../callApi';
             // alert(JSON.stringify(act_id));
             let results = await callApi(`/activity-groups/${act_id}?email=saahalla@gmail.com`, 'GET', {});
             this.activity = results;
+            this.todo_items = results.todo_items;
 
         },
         backButton() {
