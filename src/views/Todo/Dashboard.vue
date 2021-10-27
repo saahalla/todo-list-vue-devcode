@@ -50,37 +50,6 @@
                                             $vuetify.icons.custom
                                         </v-icon>
                                     </v-btn>
-                                    <v-dialog 
-                                        v-model="modalDeleteActivity" 
-                                        max-width="490px" 
-                                        style="height: 355px"
-                                        :retain-focus="false"
-                                    >
-                                        <v-card
-                                            rounded
-                                            data-cy="modal-delete"
-                                            style="text-align: center"
-                                            class="px-9 py-6"
-                                        >
-                                            <v-icon size="84" data-cy="modal-delete-icon" class="delete-card-header">
-                                                $vuetify.icons.customAlert
-                                            </v-icon>
-                                            <v-card-title style="text-align: center">
-                                                Apakah anda yakin menghapus Activity "{{itemActivity.title}}"
-                                            </v-card-title>
-                                            <v-col>
-                                                <v-btn color="#f4f4f4" data-cy="modal-delete-cancel-button" rounded class="px-8 mr-4" @click="modalDeleteActivity=false">
-                                                    Batal
-                                                </v-btn>
-                                                <v-btn color="#ED4C5C" data-cy="modal-delete-confirm-button" rounded class="px-8" @click="deleteActivity(itemActivity.id)">
-                                                    Hapus
-                                                </v-btn>
-                                            </v-col>
-                                            
-                                        </v-card>
-                                    </v-dialog>
-
-                                    <!-- </v-col> -->
                                 </v-row>
                             </div>
                         </v-card>
@@ -100,6 +69,36 @@
                     </v-img>
                 </v-col>
             </v-row>
+            <!-- modal delete -->
+            <v-dialog 
+                v-model="modalDeleteActivity" 
+                max-width="490px" 
+                style="height: 355px"
+                :retain-focus="false"
+            >
+                <v-card
+                    rounded
+                    data-cy="modal-delete"
+                    style="text-align: center"
+                    class="px-9 py-6"
+                >
+                    <v-icon size="84" data-cy="modal-delete-icon" class="delete-card-header">
+                        $vuetify.icons.customAlert
+                    </v-icon>
+                    <v-card-title style="text-align: center">
+                        Apakah anda yakin menghapus Activity "{{itemActivity.title}}"
+                    </v-card-title>
+                    <v-col>
+                        <v-btn color="#f4f4f4" data-cy="modal-delete-cancel-button" rounded class="px-8 mr-4" @click="modalDeleteActivity=false">
+                            Batal
+                        </v-btn>
+                        <v-btn color="#ED4C5C" data-cy="modal-delete-confirm-button" rounded class="px-8" @click="deleteActivity(itemActivity.id)">
+                            Hapus
+                        </v-btn>
+                    </v-col>
+                    
+                </v-card>
+            </v-dialog>
             <v-dialog v-model="deleteSuccess" max-width="490px" style="height: 58px">
                 <v-card data-cy="modal-information">
                     <v-card-title data-cy="modal-information-title">
