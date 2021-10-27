@@ -40,7 +40,12 @@
                                     <v-card-subtitle data-cy="activity-item-date">
                                         {{formatDate(act.created_at)}}
                                     </v-card-subtitle>
-                                    <v-dialog 
+                                    <v-btn color="#ED4C5C" data-cy="activity-item-delete-button" @click="deleteActivity(itemActivity.id)" plain>
+                                        <v-icon>
+                                                    $vuetify.icons.custom
+                                                </v-icon>
+                                    </v-btn>
+                                    <!-- <v-dialog 
                                         v-model="modalDeleteActivity" 
                                         max-width="490px" 
                                         style="height: 355px"
@@ -83,7 +88,7 @@
                                             </v-col>
                                             
                                         </v-card>
-                                    </v-dialog>
+                                    </v-dialog> -->
 
                                     <!-- </v-col> -->
                                 </v-row>
@@ -105,7 +110,7 @@
                     </v-img>
                 </v-col>
             </v-row>
-            <v-dialog v-model="deleteSuccess" max-width="490px" style="height: 58px">
+            <!-- <v-dialog v-model="deleteSuccess" max-width="490px" style="height: 58px">
                 <v-card data-cy="modal-information">
                     <v-card-title data-cy="modal-information-title">
                         <v-icon left data-cy="modal-information-icon">
@@ -114,7 +119,7 @@
                         Activity Berhasil Dihapus
                     </v-card-title>
                 </v-card>
-            </v-dialog>
+            </v-dialog> -->
         </div>
     </v-container>
 </template>
