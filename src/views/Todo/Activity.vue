@@ -36,68 +36,16 @@
                     </v-btn>
                 </v-col>
                 <v-col>
-                    <v-dialog
-                        v-model="modalAdd"
-                        max-width="830px"
+                    <v-btn 
+                        class="btn-add-todo white--text rounded-pill pa-6"
+                        color="#16ABF8"
+                        data-cy="todo-add-button"
+                        @click="showAddModal"
                     >
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-btn 
-                                class="btn-add-todo white--text rounded-pill pa-6"
-                                color="#16ABF8"
-                                data-cy="todo-add-button"
-                                v-bind="attrs"
-                                v-on="on" 
-                            >
-                                <v-icon>mdi-plus</v-icon>
-                                Tambah
-                            </v-btn>
-                        </template>
-                        <v-card
-                            rounded
-                            data-cy="modal-add"
-                        >
-                            <v-card-title>
-                                <v-container>
-                                    <v-row>
-                                        <h4 data-cy="modal-add-title">Tambah List Item</h4>
-                                        <v-spacer></v-spacer>
-                                        <v-btn plain @click="modalAdd=false" data-cy="modal-add-close-button">
-                                            <v-icon>
-                                                mdi-close
-                                            </v-icon>
-                                        </v-btn>
-
-                                    </v-row>
-                                </v-container>
-                            </v-card-title>
-                            <hr/>
-                            <v-card-text>
-                                <v-container>
-                                    <label class="text-uppercase" data-cy="modal-add-name-title">Nama List Item</label>
-                                    <v-text-field
-                                        outlined
-                                        data-cy="modal-add-name-input"
-                                        v-model="todo.title"
-                                    >
-                                    </v-text-field>
-
-                                    <label class="text-uppercase" data-cy="modal-add-priority-title">Priority</label>
-                                    <v-select 
-                                        v-model="todo.priority" 
-                                        :items="prioritys"
-                                        outlined
-                                        style="width: 205px"
-                                        data-cy="modal-add-priority-dropdown"
-                                    >
-                                        
-                                    </v-select>
-                                    <v-btn color="primary" rounded @click="addTodo()" data-cy="modal-add-save-button">
-                                        Simpan
-                                    </v-btn>
-                                </v-container>
-                            </v-card-text>
-                        </v-card>
-                    </v-dialog>
+                        <v-icon>mdi-plus</v-icon>
+                        Tambah
+                    </v-btn>
+                    
                 </v-col>
             </v-row>
             <div v-if="todo_items && todo_items.length > 0" class="mt-16">
@@ -125,62 +73,15 @@
                             >
                                 mdi-circle
                             </v-icon>
-                            <v-card-title data-cy="todo-item-title" id="todoItemTitle">
+                            <v-card-title data-cy="todo-item-title" id="todoItemTitle" :style="td.is_active == 0 ? 'text-decoration: line-through;': ''">
                                 {{td.title}}
                             </v-card-title>
                             <v-col>
-                                <v-dialog v-model="modalEdit" max-width="830px" :retain-focus="false">
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn data-cy="todo-item-edit-button" v-on="on" v-bind="attrs" @click="set({data: td})" plain>
-                                            <v-icon>
-                                                $vuetify.icons.customEdit
-                                            </v-icon>
-                                        </v-btn>
-                                    </template>  
-                                    <v-card
-                                        rounded
-                                        data-cy="modal-add"
-                                    >
-                                        <v-card-title>
-                                            <v-container>
-                                                <v-row>
-                                                    Edit Item
-                                                    <v-spacer></v-spacer>
-                                                    <v-icon @click="modalEdit=false">
-                                                        mdi-close
-                                                    </v-icon>
-
-                                                </v-row>
-                                            </v-container>
-                                        </v-card-title>
-                                        <hr/>
-                                        <v-card-text>
-                                            <v-container>
-                                                <label class="text-uppercase">Nama List Item</label>
-                                                <v-text-field
-                                                    outlined
-                                                    data-cy="modal-add-name-input"
-                                                    v-model="itemTodo.title"
-                                                >
-                                                </v-text-field>
-
-                                                <label class="text-uppercase">Priority</label>
-                                                <v-select 
-                                                    v-model="itemTodo.priority" 
-                                                    :items="prioritys"
-                                                    outlined
-                                                    style="width: 205px"
-                                                    data-cy="modal-add-priority-dropdown"
-                                                >
-                                                    
-                                                </v-select>
-                                                <v-btn color="primary" rounded @click="editTodo()" data-cy="modal-add-save-button">
-                                                    Simpan
-                                                </v-btn>
-                                            </v-container>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-dialog>
+                                <v-btn data-cy="todo-item-edit-button" @click="showEditModal({data: td})" plain>
+                                    <v-icon>
+                                        $vuetify.icons.customEdit
+                                    </v-icon>
+                                </v-btn>
                             </v-col>
                             
                             <v-spacer></v-spacer>
@@ -209,6 +110,103 @@
                     </v-img>
                 </v-col>
             </v-row>
+            <!-- Modal Add item Todo -->
+            <v-dialog
+                v-model="modalAdd"
+                max-width="830px"
+            >
+                <v-card
+                    rounded
+                    data-cy="modal-add"
+                >
+                    <v-card-title>
+                        <v-container>
+                            <v-row>
+                                <h4 data-cy="modal-add-title">Tambah List Item</h4>
+                                <v-spacer></v-spacer>
+                                <v-btn plain @click="modalAdd=false" data-cy="modal-add-close-button">
+                                    <v-icon>
+                                        mdi-close
+                                    </v-icon>
+                                </v-btn>
+
+                            </v-row>
+                        </v-container>
+                    </v-card-title>
+                    <hr/>
+                    <v-card-text>
+                        <v-container>
+                            <label class="text-uppercase" data-cy="modal-add-name-title">Nama List Item</label>
+                            <v-text-field
+                                outlined
+                                data-cy="modal-add-name-input"
+                                v-model="todo.title"
+                            >
+                            </v-text-field>
+
+                            <label class="text-uppercase" data-cy="modal-add-priority-title">Priority</label>
+                            <v-select 
+                                v-model="todo.priority" 
+                                :items="prioritys"
+                                outlined
+                                style="width: 205px"
+                                data-cy="modal-add-priority-dropdown"
+                            >
+                                
+                            </v-select>
+                            <v-btn color="primary" rounded @click="addTodo()" data-cy="modal-add-save-button">
+                                Simpan
+                            </v-btn>
+                        </v-container>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
+            <!-- Modal Edit Item Todo -->
+            <v-dialog v-model="modalEdit" max-width="830px" :retain-focus="false">
+                <v-card
+                    rounded
+                    data-cy="modal-add"
+                >
+                    <v-card-title>
+                        <v-container>
+                            <v-row>
+                                Edit Item
+                                <v-spacer></v-spacer>
+                                <v-icon @click="modalEdit=false">
+                                    mdi-close
+                                </v-icon>
+
+                            </v-row>
+                        </v-container>
+                    </v-card-title>
+                    <hr/>
+                    <v-card-text>
+                        <v-container>
+                            <label class="text-uppercase">Nama List Item</label>
+                            <v-text-field
+                                outlined
+                                data-cy="modal-add-name-input"
+                                v-model="itemTodo.title"
+                            >
+                            </v-text-field>
+
+                            <label class="text-uppercase">Priority</label>
+                            <v-select 
+                                v-model="itemTodo.priority" 
+                                :items="prioritys"
+                                outlined
+                                style="width: 205px"
+                                data-cy="modal-add-priority-dropdown"
+                            >
+                                
+                            </v-select>
+                            <v-btn color="primary" rounded @click="editTodo()" data-cy="modal-add-save-button">
+                                Simpan
+                            </v-btn>
+                        </v-container>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
             <!-- Modal Hapus Item Todo -->
             <v-dialog v-model="modalDelete" max-width="490px" style="height: 355px">
                 <v-card
@@ -362,6 +360,13 @@ import {callApi} from '../../callApi';
             if(results) {
                 this.getData()
             }
+        },
+        showAddModal() {
+            this.modalAdd = true;
+        },
+        showEditModal(d) {
+            this.modalEdit = true;
+            this.itemTodo = d.data;
         },
         todoColor(priority) {
             let color = priority === "very-high" ? 'red' : 
