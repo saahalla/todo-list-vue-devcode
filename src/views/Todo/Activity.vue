@@ -182,7 +182,7 @@
                     <hr/>
                     <v-card-text>
                         <v-container>
-                            <label class="text-uppercase">Nama List Item</label>
+                            <label class="text-uppercase" data-cy="modal-add-name-title">Nama List Item</label>
                             <v-text-field
                                 outlined
                                 data-cy="modal-add-name-input"
@@ -190,7 +190,7 @@
                             >
                             </v-text-field>
 
-                            <label class="text-uppercase">Priority</label>
+                            <label class="text-uppercase" data-cy="modal-add-priority-title">Priority</label>
                             <v-select 
                                 v-model="itemTodo.priority" 
                                 :items="prioritys"
@@ -355,7 +355,7 @@ import {callApi} from '../../callApi';
         },
         async updateStatusTodo(data) {
             data.is_active = data.is_active == 1 ? 0 : 1
-            alert(JSON.stringify(data))
+            // alert(JSON.stringify(data))
             let results = await callApi(`/todo-items/${data.id}`, 'PATCH', data);
             if(results) {
                 this.getData()
