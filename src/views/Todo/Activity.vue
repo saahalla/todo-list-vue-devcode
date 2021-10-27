@@ -18,13 +18,16 @@
                             v-if="edit"
                         >
                         </v-text-field>
-                        <h4 @click="edit = true" data-cy="todo-title" v-else>{{activity.title}}
+                        <v-row v-else>
+                            <h4 @click="edit = true" data-cy="todo-title" >
+                                {{activity.title}}
+                            </h4>
                             <v-btn @click="edit = true" data-cy="todo-title-edit-button" class="ml-2" plain>
                                 <v-icon>
                                     $vuetify.icons.customEdit
                                 </v-icon>
                             </v-btn>
-                        </h4>
+                        </v-row>
                     </v-row>
                 </v-col>
                 <v-spacer></v-spacer>
