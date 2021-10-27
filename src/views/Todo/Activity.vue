@@ -112,7 +112,9 @@
                         >
                         <v-row>
                             <v-checkbox
+                                :input-value="td.is_active == 1 ? false : true"
                                 data-cy="todo-item-checkbox"
+                                @click="updateStatusTodo(td)"
                             >
                             </v-checkbox>
                             <v-icon
@@ -123,7 +125,7 @@
                             >
                                 mdi-circle
                             </v-icon>
-                            <v-card-title data-cy="todo-item-title">
+                            <v-card-title data-cy="todo-item-title" id="todoItemTitle">
                                 {{td.title}}
                             </v-card-title>
                             <v-col>
@@ -183,7 +185,7 @@
                             
                             <v-spacer></v-spacer>
                             <div>
-                                <v-btn data-cy="todo-item-delete-button" v-on="on" v-bind="attrs" class="mt-4" @click="showModalDelete({data: td})" plain>
+                                <v-btn data-cy="todo-item-delete-button" class="mt-4" @click="showModalDelete({data: td})" plain>
                                     <v-icon>
                                         $vuetify.icons.custom
                                     </v-icon>
@@ -285,7 +287,8 @@ import {callApi} from '../../callApi';
             modalAdd: false,
             modalEdit: false,
             modalDelete: false,
-            itemTodo: {}
+            itemTodo: {},
+            deleteSuccess: false
                 
         }
     },
@@ -350,6 +353,14 @@ import {callApi} from '../../callApi';
                 this.getData()
                 this.modalDelete = false;
                 this.deleteSuccess = true;
+            }
+        },
+        async updateStatusTodo(data) {
+            data.is_active = data.is_active == 1 ? 0 : 1
+            alert(JSON.stringify(data))
+            let results = await callApi(`/todo-items/${data.id}`, 'PATCH', data);
+            if(results) {
+                this.getData()
             }
         },
         todoColor(priority) {
