@@ -154,7 +154,7 @@
                             >
                                 
                             </v-select>
-                            <v-btn color="primary" rounded @click="addTodo()" data-cy="modal-add-save-button">
+                            <v-btn color="primary" rounded @click="addTodo()" data-cy="modal-add-save-button" :disabled="todo.title && todo.priority ? false : true">
                                 Simpan
                             </v-btn>
                         </v-container>
