@@ -73,7 +73,7 @@
                             >
                                 mdi-circle
                             </v-icon>
-                            <v-card-title data-cy="todo-item-title" id="todoItemTitle" :style="td.is_active == 1 ? 'text-decoration: line-through; color: #888888': ''">
+                            <v-card-title data-cy="todo-item-title" id="todoItemTitle" :style="td.is_active == 0 ? 'text-decoration: line-through; color: #888888': ''">
                                 {{td.title}}
                             </v-card-title>
                             <v-col>
@@ -354,7 +354,7 @@ import {callApi} from '../../callApi';
             }
         },
         async updateStatusTodo(data) {
-            data.is_active = data.is_active == 1 ? 0 : 1
+            data.is_active = data.is_active == true ? false : true;
             // alert(JSON.stringify(data))
             await callApi(`/todo-items/${data.id}`, 'PATCH', data);
            
