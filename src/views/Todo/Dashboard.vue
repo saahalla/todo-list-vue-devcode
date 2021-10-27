@@ -40,27 +40,22 @@
                                     <v-card-subtitle data-cy="activity-item-date">
                                         {{formatDate(act.created_at)}}
                                     </v-card-subtitle>
+                                    <v-btn
+                                        data-cy="activity-item-delete-button" 
+                                        @click.stop="showModalDelete({data: act})"
+                                        plain
+                                        class="mt-2 ml-4"
+                                    >
+                                        <v-icon>
+                                            $vuetify.icons.custom
+                                        </v-icon>
+                                    </v-btn>
                                     <v-dialog 
                                         v-model="modalDeleteActivity" 
                                         max-width="490px" 
                                         style="height: 355px"
                                         :retain-focus="false"
                                     >
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <v-btn
-                                                data-cy="activity-item-delete-button" 
-                                                v-bind="attrs" 
-                                                v-on="on" 
-                                                @click="set({data: act})"
-                                                plain
-                                                class="mt-2 ml-4"
-                                            >
-                                                <v-icon>
-                                                    $vuetify.icons.custom
-                                                </v-icon>
-                                            </v-btn>
-                                            
-                                        </template>
                                         <v-card
                                             rounded
                                             data-cy="modal-delete"
@@ -190,8 +185,9 @@ import {callApi} from '../../callApi';
             // alert(id)
             this.$router.push(`/detail/${id}`)
         },
-        set(d) {
+        showModalDelete(d) {
             this.itemActivity = d.data;
+            this.modalDeleteActivity = true;
         }
     }
   } 
