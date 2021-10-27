@@ -26,10 +26,10 @@
                             width="235px"
                             height="234px"
                             style="border-radius: 10px;"
+                            @click="showActivity(act.id)"
                         >
                             <div
                                 class="card-header"
-                                @click="showActivity(act.id)"
                             >
                                 <h4 data-cy="activity-item-title">
                                     {{act.title}}
