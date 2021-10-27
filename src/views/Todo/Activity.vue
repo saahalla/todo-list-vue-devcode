@@ -183,15 +183,12 @@
                             
                             <v-spacer></v-spacer>
                             <div>
+                                <v-btn data-cy="todo-item-delete-button" v-on="on" v-bind="attrs" class="mt-4" @click="showModalDelete({data: td})" plain>
+                                    <v-icon>
+                                        $vuetify.icons.custom
+                                    </v-icon>
+                                </v-btn>
                                 <v-dialog v-model="modalDelete" max-width="490px" style="height: 355px">
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn data-cy="todo-item-delete-button" v-on="on" v-bind="attrs" class="mt-4" @click="set({data: td})" plain>
-                                            <v-icon>
-                                                $vuetify.icons.custom
-                                            </v-icon>
-                                        </v-btn>
-                                        
-                                    </template>
                                     <v-card
                                         rounded
                                         data-cy="modal-delete"
@@ -353,9 +350,10 @@ import {callApi} from '../../callApi';
                         'black';
             return color;
         }, 
-        set(d){
+        showModalDelete(d){
             // alert(JSON.stringify(d))
             this.itemTodo = d.data;
+            this.modalDelete = true;
         }
     }
   }
