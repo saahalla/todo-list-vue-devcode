@@ -100,7 +100,7 @@
                     </v-dialog>
                 </v-col>
             </v-row>
-            <!-- <div v-if="todo_items && todo_items.length > 0" class="mt-16">
+            <div v-if="todo_items && todo_items.length > 0" class="mt-16">
                 <v-row>
                     <v-col class="d-flex flex-column align-center" v-for="(td, k) in todo_items" :key="k">
                         <v-card 
@@ -222,8 +222,8 @@
                         </v-card>
                     </v-col>
                 </v-row>
-            </div> -->
-            <v-row>
+            </div>
+            <v-row v-else>
                 <v-col class="d-flex flex-column align-center mt-32">
                     <v-img 
                         src="../../assets/todo-empty-state.png" 
