@@ -27,14 +27,14 @@
                             height="234px"
                             style="border-radius: 10px;"
                         >
-                            <v-card flat
+                            <div
                                 class="card-header"
                                 @click="showActivity(act.id)"
                             >
                                 <h4 data-cy="activity-item-title">
                                     {{act.title}}
                                 </h4>
-                            </v-card>
+                            </div>
                             <div class="card-footer">
                                 <v-row>
                                     <v-card-subtitle data-cy="activity-item-date">
