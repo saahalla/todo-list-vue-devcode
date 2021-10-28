@@ -31,12 +31,11 @@
                 <v-spacer></v-spacer>
                 <v-col>
                     <v-menu offset-y data-cy="sort">
-                        <template v-slot:activator="{ on, attrs }">
+                        <template v-slot:activator="{ on }">
                             <v-btn 
                                 style="margin-top: 70px; float: right" 
                                 data-cy="todo-sort-button"
                                 v-on="on"
-                                v-bind="attrs"
                                 plain
                             >
                                 <v-icon size="50">
