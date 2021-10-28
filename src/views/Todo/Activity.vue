@@ -89,13 +89,18 @@
                             class="pa-2 px-8"
                         >
                         <v-row class="d-flex align-center">
-                            <v-checkbox
+                            <!-- <v-checkbox
                                 :input-value="td.is_active === true || td.is_active === 1 ? false : true"
                                 value
                                 data-cy="todo-item-checkbox"
                                 @click="updateStatusTodo(td)"
                             >
-                            </v-checkbox>
+                            </v-checkbox> -->
+                            <input
+                                type="checkbox"
+                                :checked="td.is_active === true || td.is_active === 1 ? false : true"
+                                @click="updateStatusTodo(td)"
+                            >
                             <v-icon
                                 :color="todoColor(td.priority)"
                                 size="9"
@@ -360,7 +365,7 @@ import {callApi} from '../../callApi';
         getData: async function() {
             let act_id = this.$route.params.id;
             // alert(JSON.stringify(act_id));
-            let results = await callApi(`/activity-groups/${act_id}?email=saahalla@gmail.com`, 'GET', {});
+            let results = await callApi(`/activity-groups/${act_id}`, 'GET', {});
             this.activity = results;
             this.todo_items = results.todo_items;
 
