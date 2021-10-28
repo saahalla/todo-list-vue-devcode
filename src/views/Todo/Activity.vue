@@ -43,20 +43,21 @@
                                 </v-icon>
                             </v-btn>
                         </template>
-                        <v-list max-width="300px">
+                        <v-list max-width="300px" data-cy="sort">
                             <v-list-item
                                 v-for="(sort, k) in sortItems"
                                 :key="k"
                                 @click="sortTodo(sort.name)"
+                                data-cy="sort-selection"
                             >
-                                <v-icon color="blue" class="mr-4">
+                                <v-icon color="blue" class="mr-4" data-cy="sort-selection-icon">
                                     {{sort.icon}}
                                 </v-icon>
-                                <v-list-item-title>
+                                <v-list-item-title data-cy="sort-selection-title">
                                     {{sort.name}}
                                 </v-list-item-title>
                                 <v-spacer></v-spacer>
-                                <v-icon v-if="sort.check === true" color="blue">
+                                <v-icon v-if="sort.check === true" color="blue" data-cy="sort-selection-selected">
                                     mdi-check
                                 </v-icon>
                             </v-list-item>
