@@ -33,14 +33,14 @@
                     <v-menu offset-y data-cy="sort">
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn 
-                                style="margin-top: 63px; float: right" 
-                                class="rounded-pill pa-6" 
+                                style="margin-top: 70px; float: right" 
                                 data-cy="todo-sort-button"
                                 v-on="on"
                                 v-bind="attrs"
+                                plain
                             >
-                                <v-icon>
-                                    mdi-sort
+                                <v-icon size="50">
+                                    $vuetify.icons.customIconSort
                                 </v-icon>
                             </v-btn>
                         </template>
@@ -113,9 +113,10 @@
                             </v-icon>
                             <v-card-title data-cy="todo-item-title" id="todoItemTitle" :style="td.is_active == 0 ? 'text-decoration: line-through; color: #888888': ''">
                                 {{td.title}}
+                                {{k}}
                             </v-card-title>
                             <!-- <v-col> -->
-                                <v-btn data-cy="todo-item-edit-button" @click="showEditModal({data: td})" plain>
+                                <v-btn data-cy="todo-item-edit-button" @click="showEditModal({data: td, index: k})" plain>
                                     <v-icon>
                                         $vuetify.icons.customEdit
                                     </v-icon>
@@ -407,7 +408,9 @@ import {callApi} from '../../callApi';
             };
             let results = await callApi(`/todo-items/${data.id}`, 'PATCH', data);
             if(results) {
-                this.getData()
+                // this.getData()
+                let i = this.itemTodo.tempIndex;
+                this.todo_items[i] = this.itemTodo;
                 this.modalEdit = false;
             }
         },
@@ -430,7 +433,10 @@ import {callApi} from '../../callApi';
         },
         showEditModal(d) {
             this.modalEdit = true;
-            this.itemTodo = d.data;
+            // alert(d.index)
+            this.itemTodo = this.todo_items[d.index];
+            this.itemTodo.tempIndex = d.index;
+            // alert(JSON.stringify(this.itemTodo))
         },
         todoColor(priority) {
             // console.log(priority);

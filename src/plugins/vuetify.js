@@ -3,6 +3,7 @@ import Vuetify from 'vuetify/lib/framework';
 import CustomIcon from '@/components/CustomIcon.vue'
 import CustomIconEdit from '@/components/CustomIconEdit.vue'
 import CustomIconAlert from '@/components/CustomIconAlert.vue'
+import CustomIconSort from '@/components/CustomIconSort.vue'
 import CustomIconCircleAlert from '@/components/CustomIconCircleAlert.vue'
 
 Vue.use(Vuetify);
@@ -21,6 +22,9 @@ export default new Vuetify({
           },
           customIconCircleAlert: {
             component: CustomIconCircleAlert
+          },
+          customIconSort: {
+            component: CustomIconSort
           }
         },
     },
