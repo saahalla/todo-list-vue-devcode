@@ -472,14 +472,14 @@ import {callApi} from '../../callApi';
                 this.sortItems[3].check = false;
                 this.sortItems[4].check = false;
             }else if(name === 'A-Z') {
-                // this.sortTerbaru();
+                this.sortAZ();
                 this.sortItems[2].check = true;
                 this.sortItems[0].check = false;
                 this.sortItems[1].check = false;
                 this.sortItems[3].check = false;
                 this.sortItems[4].check = false;
             }else if(name === 'Z-A') {
-                // this.sortTerbaru();
+                this.sortZA();
                 this.sortItems[3].check = true;
                 this.sortItems[0].check = false;
                 this.sortItems[1].check = false;
@@ -493,6 +493,7 @@ import {callApi} from '../../callApi';
                 this.sortItems[2].check = false;
                 this.sortItems[3].check = false;
             }
+            console.log(JSON.stringify(this.todo_items))
             // alert(name);
         },
         sortTerlama() {
@@ -508,6 +509,26 @@ import {callApi} from '../../callApi';
         sortBelumSelesai() {
             this.todo_items.sort(function(a,b){
                 return b.is_active - a.is_active
+            })
+        },
+        sortAZ(){
+            this.todo_items.sort(function(a,b){
+                let x = String(a.title).toLowerCase();
+                let y = String(b.title).toLowerCase();
+
+                if(x < y) {return -1;}
+                if(x > y) {return 1;}
+                return 0;
+            })
+        },
+        sortZA(){
+            this.todo_items.sort(function(a,b){
+                let x = String(a.title).toLowerCase();
+                let y = String(b.title).toLowerCase();
+
+                if(x < y) {return 1;}
+                if(x > y) {return -1;}
+                return 0;
             })
         }
     }
