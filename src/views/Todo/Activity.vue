@@ -29,7 +29,7 @@
                 </v-col>
                 <v-spacer></v-spacer>
                 <v-col>
-                    <v-menu offset-y>
+                    <v-menu offset-y data-cy="sort">
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn 
                                 style="margin-top: 63px; float: right" 
@@ -43,7 +43,7 @@
                                 </v-icon>
                             </v-btn>
                         </template>
-                        <v-list max-width="300px" data-cy="sort">
+                        <v-list max-width="300px" data-cy="sort-parent">
                             <v-list-item
                                 v-for="(sort, k) in sortItems"
                                 :key="k"
