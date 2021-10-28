@@ -100,6 +100,8 @@
                                 type="checkbox"
                                 :checked="td.is_active === true || td.is_active === 1 ? false : true"
                                 @click="updateStatusTodo(td)"
+                                style="width: 20px; height: 20px"
+                                data-cy="todo-item-checkbox"
                             >
                             <v-icon
                                 :color="todoColor(td.priority)"
