@@ -19,12 +19,12 @@
                         >
                         </v-text-field>
                         <h4 @click="edit = true" data-cy="todo-title" v-else>{{activity.title}}
-                            <v-btn @click="edit = true" data-cy="todo-title-edit-button" class="ml-2" plain>
-                                <v-icon>
-                                    $vuetify.icons.customEdit
-                                </v-icon>
-                            </v-btn>
                         </h4>
+                        <v-btn @click="edit = true" data-cy="todo-title-edit-button" class="mt-2" plain>
+                            <v-icon>
+                                $vuetify.icons.customEdit
+                            </v-icon>
+                        </v-btn>
                     </v-row>
                 </v-col>
                 <v-spacer></v-spacer>
@@ -289,7 +289,7 @@ import {callApi} from '../../callApi';
             edit: false,
             todo: {
                 title: '',
-                priority: 'High'
+                priority: 'high'
             },
             sortItems: [
                 {
@@ -320,23 +320,23 @@ import {callApi} from '../../callApi';
             ],
             prioritys: [//'Very High', 'High', 'Medium', 'Low', 'Very Low'
                 {
-                    value: 'Very High',
+                    value: 'very-high',
                     text: 'Very High',
                 },
                 {
-                    value: 'High',
+                    value: 'high',
                     text: 'High',
                 },
                 {
-                    value: 'Medium',
+                    value: 'normal',
                     text: 'Medium',
                 },
                 {
-                    value: 'Low',
+                    value: 'low',
                     text: 'Low',
                 },
                 {
-                    value: 'Very Low',
+                    value: 'very-low',
                     text: 'Very Low',
                 },
             ],
@@ -377,16 +377,10 @@ import {callApi} from '../../callApi';
             }
         },
         async addTodo() {
-            let todoPriority =  this.todo.priority === "Very High" ? 'very-high' : 
-                                this.todo.priority === "High" ? 'high' : 
-                                this.todo.priority === "Medium" ? 'normal' :
-                                this.todo.priority === "Low" ? 'low' : 
-                                this.todo.priority === "Very Low" ? 'very-low' :
-                                'high';
             let data = {
                 activity_group_id: this.activity.id,
                 title: this.todo.title,
-                priority: todoPriority
+                priority: this.itemTodo.priority
             }
             let results = await callApi('/todo-items', 'POST', data)
             if(results){
@@ -396,19 +390,11 @@ import {callApi} from '../../callApi';
             }
             // alert(JSON.stringify(results));
         },
-        async editTodo() {
-            // alert(JSON.stringify(this.itemTodo))
-            let todoPriority =  this.itemTodo.priority === "Very High" ? 'very-high' : 
-                                this.itemTodo.priority === "High" ? 'high' : 
-                                this.itemTodo.priority === "Medium" ? 'normal' :
-                                this.itemTodo.priority === "Low" ? 'low' : 
-                                this.itemTodo.priority === "Very Low" ? 'very-low' :
-                                'high';
-            
+        async editTodo() {            
             let data = {
                 id: this.itemTodo.id,
                 title: this.itemTodo.title,
-                priority: todoPriority
+                priority: this.itemTodo.priority
             };
             let results = await callApi(`/todo-items/${data.id}`, 'PATCH', data);
             if(results) {
@@ -436,12 +422,6 @@ import {callApi} from '../../callApi';
         showEditModal(d) {
             this.modalEdit = true;
             this.itemTodo = d.data;
-            this.itemTodo.priority =    
-                this.itemTodo.priority === "very-high" ? 'Very High' : 
-                this.itemTodo.priority === "high" ? 'High' : 
-                this.itemTodo.priority === "normal" ? 'Medium' :
-                this.itemTodo.priority === "low" ? 'Low' : 
-                this.itemTodo.priority === "very-low" ? 'Very Low' : ''
         },
         todoColor(priority) {
             // console.log(priority);
