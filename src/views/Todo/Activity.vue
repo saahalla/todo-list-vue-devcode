@@ -220,15 +220,17 @@
                             </v-text-field>
 
                             <label class="text-uppercase" data-cy="modal-add-priority-title">Priority</label>
-                            <v-select 
-                                v-model="itemTodo.priority" 
-                                :items="prioritys"
-                                outlined
-                                style="width: 205px"
-                                data-cy="modal-add-priority-dropdown"
-                            >
-                                
-                            </v-select>
+                            <div data-cy="modal-add-priority-dropdown">
+                                <v-select 
+                                    v-model="itemTodo.priority" 
+                                    :items="prioritys"
+                                    outlined
+                                    style="width: 205px"
+                                    data-cy="modal-add-priority-item"
+                                >
+                                    
+                                </v-select>
+                            </div>
                             <v-btn color="primary" rounded @click="editTodo()" data-cy="modal-add-save-button">
                                 Simpan
                             </v-btn>
