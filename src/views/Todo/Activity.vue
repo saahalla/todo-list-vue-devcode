@@ -14,8 +14,9 @@
                             v-model="activity.title" 
                             outlined 
                             color="#16ABF8"
-                            @change="updateActivity(activity.id)"
                             v-if="edit"
+                            autofocus
+                            @blur="updateActivity(activity.id)"
                         >
                         </v-text-field>
                         <h4 @click="edit = true" data-cy="todo-title" v-else>{{activity.title}}
