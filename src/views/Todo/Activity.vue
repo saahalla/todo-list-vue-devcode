@@ -29,11 +29,39 @@
                 </v-col>
                 <v-spacer></v-spacer>
                 <v-col>
-                    <v-btn style="margin-top: 63px; float: right" class="rounded-pill pa-6" data-cy="todo-sort-button">
-                        <v-icon>
-                            mdi-sort
-                        </v-icon>
-                    </v-btn>
+                    <v-menu offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn 
+                                style="margin-top: 63px; float: right" 
+                                class="rounded-pill pa-6" 
+                                data-cy="todo-sort-button"
+                                v-on="on"
+                                v-bind="attrs"
+                            >
+                                <v-icon>
+                                    mdi-sort
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <v-list max-width="300px">
+                            <v-list-item
+                                v-for="(sort, k) in sortItems"
+                                :key="k"
+                                @click="sortTodo(sort.name)"
+                            >
+                                <v-icon color="blue" class="mr-4">
+                                    {{sort.icon}}
+                                </v-icon>
+                                <v-list-item-title>
+                                    {{sort.name}}
+                                </v-list-item-title>
+                                <v-spacer></v-spacer>
+                                <v-icon v-if="sort.check === true" color="blue">
+                                    mdi-check
+                                </v-icon>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
                 </v-col>
                 <v-col>
                     <v-btn 
@@ -258,27 +286,54 @@ import {callApi} from '../../callApi';
             edit: false,
             todo: {
                 title: '',
-                priority: 'high'
+                priority: 'High'
             },
+            sortItems: [
+                {
+                    name: "Terbaru", 
+                    icon: "mdi-sort-ascending",
+                    check: false
+                },
+                {
+                    name: "Terlama", 
+                    icon: "mdi-sort-descending",
+                    check: false
+                },
+                {
+                    name: "A-Z", 
+                    icon: "mdi-sort-alphabetical-ascending",
+                    check: false
+                },
+                {
+                    name: "Z-A", 
+                    icon: "mdi-sort-alphabetical-descending",
+                    check: false
+                },
+                {
+                    name: "Belum Selesai", 
+                    icon: "mdi-sort",
+                    check: false
+                }
+            ],
             prioritys: [//'Very High', 'High', 'Medium', 'Low', 'Very Low'
                 {
-                    value: 'very-high',
+                    value: 'Very High',
                     text: 'Very High',
                 },
                 {
-                    value: 'high',
+                    value: 'High',
                     text: 'High',
                 },
                 {
-                    value: 'normal',
+                    value: 'Medium',
                     text: 'Medium',
                 },
                 {
-                    value: 'low',
+                    value: 'Low',
                     text: 'Low',
                 },
                 {
-                    value: 'very-low',
+                    value: 'Very Low',
                     text: 'Very Low',
                 },
             ],
@@ -319,10 +374,16 @@ import {callApi} from '../../callApi';
             }
         },
         async addTodo() {
+            let todoPriority =  this.todo.priority === "Very High" ? 'very-high' : 
+                                this.todo.priority === "High" ? 'high' : 
+                                this.todo.priority === "Medium" ? 'normal' :
+                                this.todo.priority === "Low" ? 'low' : 
+                                this.todo.priority === "Very Low" ? 'very-low' :
+                                'high';
             let data = {
                 activity_group_id: this.activity.id,
                 title: this.todo.title,
-                priority: this.todo.priority
+                priority: todoPriority
             }
             let results = await callApi('/todo-items', 'POST', data)
             if(results){
@@ -334,10 +395,17 @@ import {callApi} from '../../callApi';
         },
         async editTodo() {
             // alert(JSON.stringify(this.itemTodo))
+            let todoPriority =  this.itemTodo.priority === "Very High" ? 'very-high' : 
+                                this.itemTodo.priority === "High" ? 'high' : 
+                                this.itemTodo.priority === "Medium" ? 'normal' :
+                                this.itemTodo.priority === "Low" ? 'low' : 
+                                this.itemTodo.priority === "Very Low" ? 'very-low' :
+                                'high';
+            
             let data = {
                 id: this.itemTodo.id,
                 title: this.itemTodo.title,
-                priority: this.itemTodo.priority,
+                priority: todoPriority
             };
             let results = await callApi(`/todo-items/${data.id}`, 'PATCH', data);
             if(results) {
@@ -365,8 +433,15 @@ import {callApi} from '../../callApi';
         showEditModal(d) {
             this.modalEdit = true;
             this.itemTodo = d.data;
+            this.itemTodo.priority =    
+                this.itemTodo.priority === "very-high" ? 'Very High' : 
+                this.itemTodo.priority === "high" ? 'High' : 
+                this.itemTodo.priority === "normal" ? 'Medium' :
+                this.itemTodo.priority === "low" ? 'Low' : 
+                this.itemTodo.priority === "very-low" ? 'Very Low' : ''
         },
         todoColor(priority) {
+            // console.log(priority);
             let color = priority === "very-high" ? 'red' : 
                         priority === "high" ? 'yellow' : 
                         priority === "normal" ? 'green' :
@@ -379,6 +454,60 @@ import {callApi} from '../../callApi';
             // alert(JSON.stringify(d))
             this.itemTodo = d.data;
             this.modalDelete = true;
+        },
+        sortTodo(name) {
+            if(name === 'Terbaru') {
+                this.sortTerbaru();
+                this.sortItems[0].check = true;
+                this.sortItems[1].check = false;
+                this.sortItems[2].check = false;
+                this.sortItems[3].check = false;
+                this.sortItems[4].check = false;
+            }else if(name === 'Terlama') {
+                this.sortTerlama();
+                this.sortItems[1].check = true;
+                this.sortItems[0].check = false;
+                this.sortItems[2].check = false;
+                this.sortItems[3].check = false;
+                this.sortItems[4].check = false;
+            }else if(name === 'A-Z') {
+                // this.sortTerbaru();
+                this.sortItems[2].check = true;
+                this.sortItems[0].check = false;
+                this.sortItems[1].check = false;
+                this.sortItems[3].check = false;
+                this.sortItems[4].check = false;
+            }else if(name === 'Z-A') {
+                // this.sortTerbaru();
+                this.sortItems[3].check = true;
+                this.sortItems[0].check = false;
+                this.sortItems[1].check = false;
+                this.sortItems[2].check = false;
+                this.sortItems[4].check = false;
+            }else if(name === 'Belum Selesai') {
+                this.sortBelumSelesai();
+                this.sortItems[4].check = true;
+                this.sortItems[0].check = false;
+                this.sortItems[1].check = false;
+                this.sortItems[2].check = false;
+                this.sortItems[3].check = false;
+            }
+            // alert(name);
+        },
+        sortTerlama() {
+            this.todo_items.sort(function(a, b){
+                return a.id - b.id
+            })
+        },
+        sortTerbaru() {
+            this.todo_items.sort(function(a, b){
+                return b.id - a.id
+            })
+        },
+        sortBelumSelesai() {
+            this.todo_items.sort(function(a,b){
+                return b.is_active - a.is_active
+            })
         }
     }
   }
