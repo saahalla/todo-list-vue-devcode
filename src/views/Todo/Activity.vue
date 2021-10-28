@@ -113,7 +113,6 @@
                             </v-icon>
                             <v-card-title data-cy="todo-item-title" id="todoItemTitle" :style="td.is_active == 0 ? 'text-decoration: line-through; color: #888888': ''">
                                 {{td.title}}
-                                {{k}}
                             </v-card-title>
                             <!-- <v-col> -->
                                 <v-btn data-cy="todo-item-edit-button" @click="showEditModal({data: td, index: k})" plain>
