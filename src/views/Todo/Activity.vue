@@ -88,9 +88,10 @@
                             style="border-radius: 10px;"
                             class="pa-2 px-8"
                         >
-                        <v-row>
+                        <v-row class="d-flex align-center">
                             <v-checkbox
-                                :input-value="td.is_active == 1 ? false : true"
+                                :input-value="td.is_active === true || td.is_active === 1 ? false : true"
+                                value
                                 data-cy="todo-item-checkbox"
                                 @click="updateStatusTodo(td)"
                             >
@@ -106,17 +107,17 @@
                             <v-card-title data-cy="todo-item-title" id="todoItemTitle" :style="td.is_active == 0 ? 'text-decoration: line-through; color: #888888': ''">
                                 {{td.title}}
                             </v-card-title>
-                            <v-col>
+                            <!-- <v-col> -->
                                 <v-btn data-cy="todo-item-edit-button" @click="showEditModal({data: td})" plain>
                                     <v-icon>
                                         $vuetify.icons.customEdit
                                     </v-icon>
                                 </v-btn>
-                            </v-col>
+                            <!-- </v-col> -->
                             
                             <v-spacer></v-spacer>
                             <div>
-                                <v-btn data-cy="todo-item-delete-button" class="mt-4" @click="showModalDelete({data: td})" plain>
+                                <v-btn data-cy="todo-item-delete-button" @click="showModalDelete({data: td})" plain>
                                     <v-icon>
                                         $vuetify.icons.custom
                                     </v-icon>
