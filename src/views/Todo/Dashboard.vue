@@ -40,57 +40,16 @@
                                     <v-card-subtitle data-cy="activity-item-date">
                                         {{formatDate(act.created_at)}}
                                     </v-card-subtitle>
-                                    <!-- <v-btn color="#ED4C5C" data-cy="activity-item-delete-button" @click="deleteActivity(itemActivity.id)" plain>
-                                        <v-icon>
-                                                    $vuetify.icons.custom
-                                                </v-icon>
-                                    </v-btn> -->
-                                    <v-dialog 
-                                        v-model="modalDeleteActivity" 
-                                        max-width="490px" 
-                                        style="height: 355px"
-                                        :retain-focus="false"
+                                    <v-btn
+                                        data-cy="activity-item-delete-button" 
+                                        @click.stop="showModalDelete({data: act})"
+                                        plain
+                                        class="mt-2 ml-4"
                                     >
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <v-btn
-                                                data-cy="activity-item-delete-button" 
-                                                v-bind="attrs" 
-                                                v-on="on" 
-                                                @click="set({data: act})"
-                                                plain
-                                                class="mt-2 ml-4"
-                                            >
-                                                <v-icon>
-                                                    $vuetify.icons.custom
-                                                </v-icon>
-                                            </v-btn>
-                                            
-                                        </template>
-                                        <v-card
-                                            rounded
-                                            data-cy="modal-delete"
-                                            style="text-align: center"
-                                            class="px-9 py-6"
-                                        >
-                                            <v-icon size="84" data-cy="modal-delete-icon" class="delete-card-header">
-                                                $vuetify.icons.customAlert
-                                            </v-icon>
-                                            <v-card-title style="text-align: center">
-                                                Apakah anda yakin menghapus Activity "{{itemActivity.title}}"
-                                            </v-card-title>
-                                            <v-col>
-                                                <v-btn color="#f4f4f4" data-cy="modal-delete-cancel-button" rounded class="px-8 mr-4" @click="modalDeleteActivity=false">
-                                                    Batal
-                                                </v-btn>
-                                                <v-btn color="#ED4C5C" data-cy="modal-delete-confirm-button" rounded class="px-8" @click="deleteActivity(itemActivity.id)">
-                                                    Hapus
-                                                </v-btn>
-                                            </v-col>
-                                            
-                                        </v-card>
-                                    </v-dialog>
-
-                                    <!-- </v-col> -->
+                                        <v-icon>
+                                            $vuetify.icons.custom
+                                        </v-icon>
+                                    </v-btn>
                                 </v-row>
                             </div>
                         </v-card>
@@ -110,6 +69,36 @@
                     </v-img>
                 </v-col>
             </v-row>
+            <!-- modal delete -->
+            <v-dialog 
+                v-model="modalDeleteActivity" 
+                max-width="490px" 
+                style="height: 355px"
+                :retain-focus="false"
+            >
+                <v-card
+                    rounded
+                    data-cy="modal-delete"
+                    style="text-align: center"
+                    class="px-9 py-6"
+                >
+                    <v-icon size="84" data-cy="modal-delete-icon" class="delete-card-header">
+                        $vuetify.icons.customAlert
+                    </v-icon>
+                    <v-card-title style="text-align: center">
+                        Apakah anda yakin menghapus Activity "{{itemActivity.title}}"
+                    </v-card-title>
+                    <v-col>
+                        <v-btn color="#f4f4f4" data-cy="modal-delete-cancel-button" rounded class="px-8 mr-4" @click="modalDeleteActivity=false">
+                            Batal
+                        </v-btn>
+                        <v-btn color="#ED4C5C" data-cy="modal-delete-confirm-button" rounded class="px-8" @click="deleteActivity(itemActivity.id)">
+                            Hapus
+                        </v-btn>
+                    </v-col>
+                    
+                </v-card>
+            </v-dialog>
             <v-dialog v-model="deleteSuccess" max-width="490px" style="height: 58px">
                 <v-card data-cy="modal-information">
                     <v-card-title data-cy="modal-information-title">
@@ -195,8 +184,9 @@ import {callApi} from '../../callApi';
             // alert(id)
             this.$router.push(`/detail/${id}`)
         },
-        set(d) {
+        showModalDelete(d) {
             this.itemActivity = d.data;
+            this.modalDeleteActivity = true;
         }
     }
   } 
